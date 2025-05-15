@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - demo-bad-practice
+      - demo-bon-practice
   pull_request:
     branches:
       - main
       - demo-bad-practice
+      - demo-bon-practice
 
 permissions:
   actions: read
