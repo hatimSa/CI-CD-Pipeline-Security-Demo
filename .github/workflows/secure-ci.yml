@@ -1,0 +1,56 @@
+name: Secure CI
+
+on:
+  push:
+    branches:
+      - main
+      - demo-bad-practice
+  pull_request:
+    branches:
+      - main
+      - demo-bad-practice
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          if [ "${{ github.ref_name }}" = "demo-bad-practice" ]; then
+            pytest test_bad_practice.py
+          else
+            pytest test_main.py
+          fi
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: python
+
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@v2
+
+      - name: Scan for secrets with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
