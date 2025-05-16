@@ -14,6 +14,6 @@ pytest
 
 ## GitHub Actions Workflow
 
-A GitHub Actions workflow runs on push or pull request to the `main` or `demo-bad-practice` branches.
+A GitHub Actions workflow runs on push or pull request to the `main`, `demo-bad-practice` or `demo-bon-practice` branches.
 
 Enjoy!
